@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect, useContext, Fragment } from 'react';
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
@@ -7,8 +7,11 @@ import colors from '../../../styles/colors';
 
 //Components
 import CardContainer from '../../card/CardContainer';
-import LikeButton from '../../buttons/LikeButton';
+import LikeButton from '../../buttons/likeButton/LikeButton';
 import ActionButton from '../../buttons/CardActionButton';
+
+//Context
+import commentContext from '../../../context/comment/commentContext';
 
 import AmyRobinson from '../../../images/avatars/image-amyrobson.png';
 
@@ -59,6 +62,15 @@ const UserName = styled.span`
     padding: 0 0.75rem;
 `;
 
+const Label = styled.span`
+    background-color: ${colors.colorPrimaryModBlue};
+    color: #fff;
+    padding: 0.2rem 0.5rem;
+    margin-right: 1rem;
+    border-radius: 5px;
+    font-size: 12px;
+`;
+
 const Date = styled.span`
     color: ${colors.colorNeutralGrayBlue}
 `;
@@ -70,10 +82,17 @@ const CommentArea = styled.p`
     padding-bottom: 1rem;
 `;
 
+const ActionButtonContainer = styled.div`
+    justify-self: end;
+`;
+
 //Components
 
 const CommentCard = ({data}) => {
-    const { id, content, createdAt, score, user, replies } = data;
+    const CommentContext = useContext(commentContext);
+    const { activeUser } = CommentContext;
+
+    const { content, createdAt, score, user, id, replies } = data;
     const { image, username } = user;
 
     const [dimensions, setDimensions] = useState({
@@ -100,16 +119,24 @@ const CommentCard = ({data}) => {
           <CardContainer>
               <ContentDesktop>
                   <ContentLeft>
-                    <LikeButton className='desktop' score={score} />
+                    <LikeButton className='desktop' score={score} id={id} />
                   </ContentLeft>
                   <ContentRight>  
                     <InfoArea>
                         <UserInfo>
-                            <Avatar src={AmyRobinson} alt={username} height="30" width="30" />
+                            <Avatar src={image.png} alt={username} height="30" width="30" />
                             <UserName>{username}</UserName>
+                            {username === activeUser && <Label>you</Label>}
                             <Date>{createdAt}</Date>
                         </UserInfo>  
-                        <ActionButton type='reply' />
+                        {username === activeUser ? (
+                            <ActionButtonContainer>
+                                <ActionButton type='edit' />
+                                <ActionButton type='delete' />
+                            </ActionButtonContainer>
+                            ) : (
+                            <ActionButton type='reply' />
+                        )}
                     </InfoArea>        
                     <CommentArea>
                         {content}
@@ -125,8 +152,9 @@ const CommentCard = ({data}) => {
                     <Fragment>   
                         <InfoArea>
                             <UserInfo>
-                                <Avatar src={AmyRobinson} alt={username} height="30" width="30" />
+                                <Avatar src={image.png} alt={username} height="30" width="30" />
                                 <UserName>{username}</UserName>
+                                {username === activeUser && <Label>you</Label>} 
                                 <Date>{createdAt}</Date>
                             </UserInfo>         
                         </InfoArea>
@@ -136,7 +164,14 @@ const CommentCard = ({data}) => {
                     </Fragment>
                     <ContentBottom>
                       <LikeButton className='mobile' score={score} />
-                      <ActionButton type='reply' />
+                      {username === activeUser ? (
+                            <ActionButtonContainer>
+                                <ActionButton type='edit' />
+                                <ActionButton type='delete' />
+                            </ActionButtonContainer>
+                            ) : (
+                            <ActionButton type='reply' />
+                        )}
                     </ContentBottom>
                 </ContentMobile>
             </CardContainer>

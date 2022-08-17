@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot 1`] = `
+<div
+  className="sc-bczRLJ ivHeaC desktop"
+  data-testid="like-button"
+>
+  <img
+    alt="Plus"
+    className="sc-dkzDqf hGjhtN"
+    id="like-button-plus"
+    onClick={[Function]}
+    src="icon-plus.svg"
+  />
+  <span
+    className="sc-gsnTZi IwjZD desktop"
+  >
+    6
+  </span>
+  <img
+    alt="Minus"
+    className="sc-dkzDqf hGjhtN"
+    id="like-button-minus"
+    onClick={[Function]}
+    src="icon-minus.svg"
+  />
+</div>
+`;

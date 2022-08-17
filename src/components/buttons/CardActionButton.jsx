@@ -13,6 +13,11 @@ import ReplyImage from '../../images/icon-reply.svg';
 const Container = styled.div`
     display: inline-flex;
     align-items: center;
+    margin-left: 1rem;
+    &:hover {
+        filter: brightness(80%);
+        cursor: pointer;
+    }
 `;
 
 const ActionImage = styled.img`
@@ -24,6 +29,9 @@ const TypeText = styled.span`
     font-weight: 500;
     padding-left: 0.75rem;
     text-transform: capitalize;
+    &.delete {
+        color: ${colors.colorPrimarySoftRed}
+    }
 `;
 
 const CardActionButton = ({type}) => {
@@ -49,7 +57,7 @@ const CardActionButton = ({type}) => {
   return (
     <Container>
       <ActionImage src={switchImage(type)} alt={type} />
-      <TypeText>{type}</TypeText>
+      <TypeText className={type} >{type}</TypeText>
     </Container>
   )
 };
