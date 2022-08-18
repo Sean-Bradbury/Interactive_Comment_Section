@@ -1,1 +1,6 @@
 export const LOAD_COMMENTS = 'lOAD_COMMENTS';
+export const EDIT_COMMENT = 'EDIT_COMMENT';
+export const DELETE_COMMENT = 'DELETE_COMMENT';
+export const DELETE_REPLY = 'DELETE_REPLY';
+export const REPLY_COMMENT = 'REPLY_COMMENT';
+export const SHOW_MODAL = 'SHOW_MODAL';

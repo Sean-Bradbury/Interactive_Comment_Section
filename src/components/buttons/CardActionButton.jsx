@@ -1,4 +1,4 @@
-import React from 'react';
+import { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -10,6 +10,9 @@ import DeleteImage from '../../images/icon-delete.svg';
 import EditImage from '../../images/icon-edit.svg';
 import ReplyImage from '../../images/icon-reply.svg';
 
+//Context
+import commentContext from '../../context/comment/commentContext';
+
 const Container = styled.div`
     display: inline-flex;
     align-items: center;
@@ -17,6 +20,10 @@ const Container = styled.div`
     &:hover {
         filter: brightness(80%);
         cursor: pointer;
+    }
+    &:active,
+    &:focus {
+        opacity: 0.5;
     }
 `;
 
@@ -34,7 +41,22 @@ const TypeText = styled.span`
     }
 `;
 
-const CardActionButton = ({type}) => {
+
+const CardActionButton = ({type, id, cardType}) => {
+    const CommentContext = useContext(commentContext);
+
+    const handleAction = (type) => {
+        if(type === 'delete'){
+            if(cardType === 'comment'){
+                //CommentContext.deleteComment(id);
+                CommentContext.showModal(true);
+            } else if (cardType === 'reply') {
+                //CommentContext.deleteReply(id);
+                CommentContext.showModal(true);
+            }
+        }
+    };
+
     const switchImage = (imageType) => {
         switch(imageType){
             case 'reply':
@@ -55,7 +77,7 @@ const CardActionButton = ({type}) => {
     }
 
   return (
-    <Container>
+    <Container onClick={() => handleAction(type)}>
       <ActionImage src={switchImage(type)} alt={type} />
       <TypeText className={type} >{type}</TypeText>
     </Container>

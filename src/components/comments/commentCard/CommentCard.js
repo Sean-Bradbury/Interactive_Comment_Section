@@ -13,8 +13,6 @@ import ActionButton from '../../buttons/CardActionButton';
 //Context
 import commentContext from '../../../context/comment/commentContext';
 
-import AmyRobinson from '../../../images/avatars/image-amyrobson.png';
-
 // For like button
 
 
@@ -88,9 +86,9 @@ const ActionButtonContainer = styled.div`
 
 //Components
 
-const CommentCard = ({data}) => {
+const CommentCard = ({data, cardType}) => {
     const CommentContext = useContext(commentContext);
-    const { activeUser } = CommentContext;
+    const { currentUser } = CommentContext;
 
     const { content, createdAt, score, user, id, replies } = data;
     const { image, username } = user;
@@ -113,7 +111,6 @@ const CommentCard = ({data}) => {
         });
     }, [setDimensions]);
 
-
     if(dimensions.width > 768){
         return (
           <CardContainer>
@@ -126,16 +123,16 @@ const CommentCard = ({data}) => {
                         <UserInfo>
                             <Avatar src={image.png} alt={username} height="30" width="30" />
                             <UserName>{username}</UserName>
-                            {username === activeUser && <Label>you</Label>}
+                            {username === currentUser.username && <Label>you</Label>}
                             <Date>{createdAt}</Date>
                         </UserInfo>  
-                        {username === activeUser ? (
+                        {username === currentUser.username ? (
                             <ActionButtonContainer>
-                                <ActionButton type='edit' />
-                                <ActionButton type='delete' />
+                                <ActionButton type='edit' id={id} cardType={cardType}/>
+                                <ActionButton type='delete' id={id} cardType={cardType}/>
                             </ActionButtonContainer>
                             ) : (
-                            <ActionButton type='reply' />
+                            <ActionButton type='reply' id={id} cardType={cardType}/>
                         )}
                     </InfoArea>        
                     <CommentArea>
@@ -154,7 +151,7 @@ const CommentCard = ({data}) => {
                             <UserInfo>
                                 <Avatar src={image.png} alt={username} height="30" width="30" />
                                 <UserName>{username}</UserName>
-                                {username === activeUser && <Label>you</Label>} 
+                                {username === currentUser.username && <Label>you</Label>} 
                                 <Date>{createdAt}</Date>
                             </UserInfo>         
                         </InfoArea>
@@ -164,13 +161,13 @@ const CommentCard = ({data}) => {
                     </Fragment>
                     <ContentBottom>
                       <LikeButton className='mobile' score={score} />
-                      {username === activeUser ? (
+                      {username === currentUser.username ? (
                             <ActionButtonContainer>
-                                <ActionButton type='edit' />
-                                <ActionButton type='delete' />
+                                <ActionButton type='edit' id={id} cardType={cardType}/>
+                                <ActionButton type='delete' id={id} cardType={cardType}/>
                             </ActionButtonContainer>
                             ) : (
-                            <ActionButton type='reply' />
+                            <ActionButton type='reply' id={id} cardType={cardType}/>
                         )}
                     </ContentBottom>
                 </ContentMobile>
@@ -181,6 +178,7 @@ const CommentCard = ({data}) => {
 
 CommentCard.propTypes = {
     data: PropTypes.object.isRequired,
+    cardType: PropTypes.string.isRequired,
 }
 
 export default CommentCard

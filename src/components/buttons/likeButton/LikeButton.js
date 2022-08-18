@@ -46,6 +46,10 @@ const LikeButtonImage = styled.img`
   &:hover {
     filter: brightness(50%);
   }
+  &:active,
+  &:focus {
+    opacity: 0.5;
+  }
 `;
 
 const LikeButton = ({ score, className }) => {
