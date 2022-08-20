@@ -7,9 +7,11 @@ import colors from '../../../styles/colors';
 //Components
 import CommentCard from '../commentCard/CommentCard';
 import DeleteModal from '../../modal/DeleteModal';
+import CommentForm from '../../form/CommentForm';
 
 //Context
 import commentContext from '../../../context/comment/commentContext';
+import appContext from '../../../context/app/appContext';
 
 const Container = styled.div`
   display: flex;
@@ -24,6 +26,11 @@ const Indent = styled.div`
   margin-left: 50px;
   padding-left: 50px;
   border-left: 2px solid ${colors.colorNeutrallLghtGray};
+  margin-bottom: 2rem;
+  &.mobile {
+    margin-left: 25px;
+    padding-left: 25px;
+  }
   div:last-child {
     margin-bottom: 0;
   }
@@ -31,11 +38,32 @@ const Indent = styled.div`
 
 const CommentsArea = (props) => {
   const CommentContext = useContext(commentContext);
+  const AppContext = useContext(appContext);
+  const { setDimensions, dimensions } = AppContext;
 
   const { loadComments, comments } = CommentContext;
+  useEffect(() => {
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     loadComments();
+
+    setDimensions({
+      height: window.innerHeight,
+      width: window.innerWidth,
+    });
+
+    const handleResize = () => {
+      setDimensions({
+        height: window.innerHeight,
+        width: window.innerWidth,
+      });
+    };
+
+    window.addEventListener('resize', () => {
+      handleResize();
+    });
     //eslint-disable-next-line
   }, []);
 
@@ -57,7 +85,9 @@ const CommentsArea = (props) => {
               return (
                 <Fragment key={comment.id}>
                   <CommentCard data={comment} cardType="comment" />
-                  <Indent>
+                  <Indent
+                    className={dimensions.width < 768 && 'mobile'}
+                  >
                     {replies.map((reply) => {
                       return (
                         <CommentCard
@@ -72,6 +102,7 @@ const CommentsArea = (props) => {
               );
             }
           })}
+        <CommentForm />
       </Container>
       <DeleteModal />
     </Fragment>

@@ -2,9 +2,9 @@ import {
   LOAD_COMMENTS,
   EDIT_COMMENT,
   DELETE_COMMENT,
-  DELETE_REPLY,
   REPLY_COMMENT,
   SHOW_MODAL,
+  UPDATE_LIKES_COMMENT,
 } from '../types';
 
 const Reducer = (state, action) => {
@@ -23,18 +23,33 @@ const Reducer = (state, action) => {
     case DELETE_COMMENT:
       return {
         ...state,
-        comments: state.comments.filter(
-          (comment) => comment.id !== action.payload
-        ),
+        comments: state.comments
+          .map((comment) => {
+            comment.replies = comment.replies.filter(
+              (reply) => reply.id !== action.payload
+            );
+            return comment;
+          })
+          .filter((comment) => comment.id !== action.payload),
       };
-    case DELETE_REPLY:
+    case UPDATE_LIKES_COMMENT:
       return {
         ...state,
         comments: state.comments.map((comment) => {
-          comment.replies = comment.replies.filter(
-            (reply) => reply.id !== action.payload
-          );
-          return comment;
+          if (comment.id === action.id) {
+            comment.score = action.payload;
+            return comment;
+          } else {
+            comment.replies.map((reply) => {
+              if (reply.id === action.id) {
+                reply.score = action.payload;
+                return reply;
+              } else {
+                return reply;
+              }
+            });
+            return comment;
+          }
         }),
       };
     case REPLY_COMMENT:
@@ -45,6 +60,7 @@ const Reducer = (state, action) => {
       return {
         ...state,
         modal: action.payload,
+        currentCommentID: action.id,
       };
     default:
       return state;

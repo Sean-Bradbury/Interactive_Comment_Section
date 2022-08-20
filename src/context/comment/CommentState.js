@@ -8,16 +8,16 @@ import {
   EDIT_COMMENT,
   DELETE_COMMENT,
   REPLY_COMMENT,
-  DELETE_REPLY,
   SHOW_MODAL,
+  UPDATE_LIKES_COMMENT,
 } from '../types';
 
 const CommentState = (props) => {
   const initialState = {
     comments: null,
     currentUser: null,
-    activeUser: 'juliusomo',
     modal: false,
+    currentCommentID: null,
   };
 
   const [state, dispatch] = useReducer(CommentReducer, initialState);
@@ -52,12 +52,13 @@ const CommentState = (props) => {
     }
   };
 
-  //Delete a comment
-  const deleteReply = (id) => {
+  //Update likes
+  const updateLikesComment = (id, likes) => {
     try {
       dispatch({
-        type: DELETE_REPLY,
-        payload: id,
+        type: UPDATE_LIKES_COMMENT,
+        id,
+        payload: likes,
       });
     } catch (err) {
       console.log(err);
@@ -65,11 +66,12 @@ const CommentState = (props) => {
   };
 
   //Show modal
-  const showModal = (action) => {
+  const showModal = (activeState, id) => {
     try {
       dispatch({
         type: SHOW_MODAL,
-        payload: action,
+        payload: activeState,
+        id,
       });
     } catch (err) {
       console.log(err);
@@ -83,10 +85,11 @@ const CommentState = (props) => {
         currentUser: state.currentUser,
         activeUser: state.activeUser,
         modal: state.modal,
+        currentCommentID: state.currentCommentID,
         deleteComment,
-        deleteReply,
         loadComments,
         showModal,
+        updateLikesComment,
       }}
     >
       {props.children}

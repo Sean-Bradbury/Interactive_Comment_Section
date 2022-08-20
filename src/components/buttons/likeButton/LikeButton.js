@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -18,21 +18,20 @@ const LikeButtonContainer = styled.div`
   align-self: start;
   justify-content: space-between;
   padding: 0.5rem 1rem;
-  min-width: 140px;
   border-radius: 10px;
   background-color: ${colors.colorNeutralVLightGray};
   &.desktop {
     flex-direction: column;
     align-items: center;
-    padding: 1rem 0.5rem;
-    min-width: 45px;
+    padding: 1rem 0;
   }
 `;
 
 const Score = styled.span`
-  padding: 0 1rem;
+  padding: 0 0.5rem;
   color: ${colors.colorPrimaryModBlue};
   font-weight: 500;
+  min-width: 37px;
   &.desktop {
     padding: 1rem 0;
   }
@@ -41,7 +40,7 @@ const Score = styled.span`
 const LikeButtonImage = styled.img`
   object-fit: contain;
   object-position: center;
-  padding: 8px;
+  padding: 5px;
   cursor: pointer;
   &:hover {
     filter: brightness(50%);
@@ -52,10 +51,16 @@ const LikeButtonImage = styled.img`
   }
 `;
 
-const LikeButton = ({ score, className }) => {
+const LikeButton = ({ score, className, id, cardType }) => {
   const [currentScore, setCurrentScore] = useState(score);
 
   const CommentContext = useContext(commentContext);
+  const { updateLikesReply, updateLikesComment } = CommentContext;
+
+  useEffect(() => {
+    updateLikesComment(id, currentScore);
+    // eslint-disable-next-line
+  }, [currentScore]);
 
   const handleScoreClick = (direction) => {
     if (direction === 'plus') {
@@ -90,6 +95,8 @@ const LikeButton = ({ score, className }) => {
 LikeButton.propTypes = {
   score: PropTypes.number.isRequired,
   className: PropTypes.string.isRequired,
+  cardType: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
 };
 
 export default LikeButton;

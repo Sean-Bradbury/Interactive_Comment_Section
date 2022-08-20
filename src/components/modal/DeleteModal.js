@@ -57,13 +57,14 @@ const Button = styled.div`
 
 const DeleteModal = () => {
   const CommentContext = useContext(commentContext);
-
-  const { modal, showModal } = CommentContext;
+  const { deleteComment, showModal, modal, currentCommentID } =
+    CommentContext;
 
   const handleShowModal = (action) => {
     if (action === 'cancel') {
       showModal(false);
-    } else {
+    } else if (action === 'delete') {
+      deleteComment(currentCommentID);
       showModal(false);
     }
   };

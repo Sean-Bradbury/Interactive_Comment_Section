@@ -42,18 +42,13 @@ const TypeText = styled.span`
 `;
 
 
-const CardActionButton = ({type, id, cardType}) => {
+const CardActionButton = ({type, id}) => {
     const CommentContext = useContext(commentContext);
+    const { showModal } = CommentContext;
 
     const handleAction = (type) => {
         if(type === 'delete'){
-            if(cardType === 'comment'){
-                //CommentContext.deleteComment(id);
-                CommentContext.showModal(true);
-            } else if (cardType === 'reply') {
-                //CommentContext.deleteReply(id);
-                CommentContext.showModal(true);
-            }
+            showModal(true, id);
         }
     };
 
