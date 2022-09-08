@@ -102,7 +102,7 @@ const CommentsArea = (props) => {
               );
             }
           })}
-        <CommentForm />
+        <CommentForm type="comment" />
       </Container>
       <DeleteModal />
     </Fragment>

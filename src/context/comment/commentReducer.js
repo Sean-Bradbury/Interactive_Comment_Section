@@ -1,6 +1,7 @@
 import {
   LOAD_COMMENTS,
   EDIT_COMMENT,
+  ADD_COMMENT,
   DELETE_COMMENT,
   REPLY_COMMENT,
   SHOW_MODAL,
@@ -18,7 +19,27 @@ const Reducer = (state, action) => {
     case EDIT_COMMENT:
       return {
         ...state,
-        data: action.payload,
+        comments: state.comments.map((comment) => {
+          if (comment.id === action.id) {
+            comment.content = action.payload;
+            return comment;
+          } else {
+            comment.replies.map((reply) => {
+              if (reply.id === action.id) {
+                reply.content = action.payload;
+                return reply;
+              } else {
+                return reply;
+              }
+            });
+            return comment;
+          }
+        }),
+      };
+    case ADD_COMMENT:
+      return {
+        ...state,
+        comments: state.comments.concat(action.payload),
       };
     case DELETE_COMMENT:
       return {
@@ -55,6 +76,21 @@ const Reducer = (state, action) => {
     case REPLY_COMMENT:
       return {
         ...state,
+        comments: state.comments.map((comment) => {
+          if (comment.id === action.id) {
+            comment.replies = comment.replies
+              .filter((reply) => reply.id !== action.payload.id)
+              .concat(action.payload);
+          } else {
+            comment.replies.forEach((reply) => {
+              if (reply.id === action.id)
+                comment.replies = comment.replies
+                  .filter((reply) => reply.id !== action.payload.id)
+                  .concat(action.payload);
+            });
+          }
+          return comment;
+        }),
       };
     case SHOW_MODAL:
       return {

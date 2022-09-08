@@ -6,6 +6,7 @@ import CommentReducer from './commentReducer';
 import {
   LOAD_COMMENTS,
   EDIT_COMMENT,
+  ADD_COMMENT,
   DELETE_COMMENT,
   REPLY_COMMENT,
   SHOW_MODAL,
@@ -40,12 +41,37 @@ const CommentState = (props) => {
     }
   };
 
+  //Add comment
+  const addComment = (comment) => {
+    try {
+      dispatch({
+        type: ADD_COMMENT,
+        payload: comment,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   //Delete a comment
   const deleteComment = (id) => {
     try {
       dispatch({
         type: DELETE_COMMENT,
         payload: id,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // Reply comment
+  const replyComment = (id, comment) => {
+    try {
+      dispatch({
+        type: REPLY_COMMENT,
+        id: id,
+        payload: comment,
       });
     } catch (err) {
       console.log(err);
@@ -59,6 +85,19 @@ const CommentState = (props) => {
         type: UPDATE_LIKES_COMMENT,
         id,
         payload: likes,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //Edit comment
+  const editComment = (id, text) => {
+    try {
+      dispatch({
+        type: EDIT_COMMENT,
+        id,
+        payload: text,
       });
     } catch (err) {
       console.log(err);
@@ -86,7 +125,10 @@ const CommentState = (props) => {
         activeUser: state.activeUser,
         modal: state.modal,
         currentCommentID: state.currentCommentID,
+        addComment,
+        replyComment,
         deleteComment,
+        editComment,
         loadComments,
         showModal,
         updateLikesComment,

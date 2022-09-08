@@ -51,11 +51,11 @@ const LikeButtonImage = styled.img`
   }
 `;
 
-const LikeButton = ({ score, className, id, cardType }) => {
+const LikeButton = ({ score, className, id }) => {
   const [currentScore, setCurrentScore] = useState(score);
 
   const CommentContext = useContext(commentContext);
-  const { updateLikesReply, updateLikesComment } = CommentContext;
+  const { updateLikesComment } = CommentContext;
 
   useEffect(() => {
     updateLikesComment(id, currentScore);
@@ -95,8 +95,7 @@ const LikeButton = ({ score, className, id, cardType }) => {
 LikeButton.propTypes = {
   score: PropTypes.number.isRequired,
   className: PropTypes.string.isRequired,
-  cardType: PropTypes.string.isRequired,
-  id: PropTypes.number.isRequired,
+  id: PropTypes.any,
 };
 
 export default LikeButton;

@@ -42,13 +42,17 @@ const TypeText = styled.span`
 `;
 
 
-const CardActionButton = ({type, id}) => {
+const CardActionButton = ({type, id, setShowReplyForm, setShowEditForm}) => {
     const CommentContext = useContext(commentContext);
     const { showModal } = CommentContext;
 
     const handleAction = (type) => {
         if(type === 'delete'){
             showModal(true, id);
+        } else if(type === 'reply'){
+            setShowReplyForm(true);
+        } else if(type === 'edit'){
+            setShowEditForm(true);
         }
     };
 
@@ -81,6 +85,7 @@ const CardActionButton = ({type, id}) => {
 
 CardActionButton.propTypes = {
     type: PropTypes.string.isRequired,
+    setShowReplyForm: PropTypes.func,
 };
 
 export default CardActionButton;

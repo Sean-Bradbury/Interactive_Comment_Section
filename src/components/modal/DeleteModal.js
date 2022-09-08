@@ -2,6 +2,7 @@ import { useEffect, useContext } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { fadeIn } from 'react-animations';
 import commentContext from '../../context/comment/commentContext';
+import { ToastContainer, toast } from 'react-toastify';
 
 //Components
 import CardContainer from '../card/CardContainer';
@@ -65,6 +66,7 @@ const DeleteModal = () => {
       showModal(false);
     } else if (action === 'delete') {
       deleteComment(currentCommentID);
+      toast.success('COMMMENT DELETED');
       showModal(false);
     }
   };
@@ -72,6 +74,7 @@ const DeleteModal = () => {
   return (
     modal && (
       <ModalWrapper>
+        <ToastContainer theme="light" />
         <ModalContainer>
           <CardContainer>
             <Content>

@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, Fragment } from 'react';
+import { useState, useContext, Fragment } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -14,6 +14,7 @@ import Avatar from '../../avatar/Avatar';
 //Context
 import commentContext from '../../../context/comment/commentContext';
 import appContext from '../../../context/app/appContext';
+import CommentForm from '../../form/CommentForm';
 
 // For like button
 
@@ -72,85 +73,141 @@ const CommentArea = styled.p`
   text-align: left;
   line-height: 25px;
   padding-bottom: 1rem;
+  display: flex;
+  width: 100%:
 `;
 
 const ActionButtonContainer = styled.div`
-  justify-self: end;
+  position: absolute;
+  right: 1rem;
+  &.mobile {
+    bottom: 1rem;
+  }
 `;
 
 //Components
 
 const CommentCard = ({ data }) => {
+  const [showReplyForm, setShowReplyForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
   const CommentContext = useContext(commentContext);
   const AppContext = useContext(appContext);
   const { dimensions } = AppContext;
 
   const { currentUser } = CommentContext;
 
-  const { content, createdAt, score, user, id, replies } = data;
+  const { content, createdAt, score, user, id } = data;
   const { image, username } = user;
 
   if (dimensions.width > 768) {
     return (
-      <CardContainer>
-        <ContentDesktop>
-          <ContentLeft>
-            <LikeButton className="desktop" score={score} id={id} />
-          </ContentLeft>
-          <ContentRight>
-            <InfoArea>
-              <UserInfo>
-                <Avatar src={image.png} alt={username} />
-                <UserName>{username}</UserName>
-                {username === currentUser.username && (
-                  <Label>you</Label>
+      <Fragment>
+        <CardContainer>
+          <ContentDesktop>
+            <ContentLeft>
+              <LikeButton className="desktop" score={score} id={id} />
+            </ContentLeft>
+            <ContentRight>
+              <InfoArea>
+                <UserInfo>
+                  <Avatar src={image.png} alt={username} />
+                  <UserName>{username}</UserName>
+                  {username === currentUser.username && (
+                    <Label>you</Label>
+                  )}
+                  <Date>{createdAt}</Date>
+                </UserInfo>
+                {username === currentUser.username ? (
+                  <ActionButtonContainer className="desktop">
+                    <ActionButton
+                      type="edit"
+                      id={id}
+                      setShowEditForm={setShowEditForm}
+                    />
+                    <ActionButton type="delete" id={id} />
+                  </ActionButtonContainer>
+                ) : (
+                  <ActionButton
+                    type="reply"
+                    id={id}
+                    setShowReplyForm={setShowReplyForm}
+                  />
                 )}
-                <Date>{createdAt}</Date>
-              </UserInfo>
-              {username === currentUser.username ? (
-                <ActionButtonContainer>
-                  <ActionButton type="edit" id={id} />
-                  <ActionButton type="delete" id={id} />
-                </ActionButtonContainer>
-              ) : (
-                <ActionButton type="reply" id={id} />
-              )}
-            </InfoArea>
-            <CommentArea>{content}</CommentArea>
-          </ContentRight>
-        </ContentDesktop>
-      </CardContainer>
+              </InfoArea>
+              <CommentArea>{content}</CommentArea>
+            </ContentRight>
+          </ContentDesktop>
+        </CardContainer>
+        {showReplyForm && (
+          <CommentForm
+            type="reply"
+            id={id}
+            setShowReplyForm={setShowReplyForm}
+          />
+        )}
+        {showEditForm && (
+          <CommentForm
+            type="edit"
+            id={id}
+            setShowEditForm={setShowEditForm}
+          />
+        )}
+      </Fragment>
     );
   } else {
     return (
-      <CardContainer>
-        <ContentMobile>
-          <Fragment>
-            <InfoArea>
-              <UserInfo>
-                <Avatar src={image.png} alt={username} />
-                <UserName>{username}</UserName>
-                {username === currentUser.username && (
-                  <Label>you</Label>
-                )}
-                <Date>{createdAt}</Date>
-              </UserInfo>
-            </InfoArea>
-            <CommentArea>{content}</CommentArea>
-          </Fragment>
-          <ContentBottom>
-            <LikeButton className="mobile" score={score} id={id} />
-            {username === currentUser.username ? (
-              <ActionButtonContainer>
-                <ActionButton type="edit" id={id} />
-                <ActionButton type="delete" id={id} />
-              </ActionButtonContainer>
-            ) : (
-              <ActionButton type="reply" id={id} />
-            )}
-          </ContentBottom>
-        </ContentMobile>
-      </CardContainer>
+      <Fragment>
+        <CardContainer>
+          <ContentMobile>
+            <Fragment>
+              <InfoArea>
+                <UserInfo>
+                  <Avatar src={image.png} alt={username} />
+                  <UserName>{username}</UserName>
+                  {username === currentUser.username && (
+                    <Label>you</Label>
+                  )}
+                  <Date>{createdAt}</Date>
+                </UserInfo>
+              </InfoArea>
+              <CommentArea>{content}</CommentArea>
+            </Fragment>
+            <ContentBottom>
+              <LikeButton className="mobile" score={score} id={id} />
+              {username === currentUser.username ? (
+                <ActionButtonContainer>
+                  <ActionButton
+                    type="edit"
+                    id={id}
+                    setShowEditForm={setShowEditForm}
+                  />
+                  <ActionButton type="delete" id={id} />
+                </ActionButtonContainer>
+              ) : (
+                <ActionButton
+                  type="reply"
+                  id={id}
+                  setShowReplyForm={setShowReplyForm}
+                />
+              )}
+            </ContentBottom>
+          </ContentMobile>
+        </CardContainer>
+        {showReplyForm && (
+          <CommentForm
+            type="reply"
+            id={id}
+            setShowReplyForm={setShowReplyForm}
+          />
+        )}
+        {showEditForm && (
+          <CommentForm
+            type="edit"
+            id={id}
+            setShowEditForm={setShowEditForm}
+          />
+        )}
+      </Fragment>
     );
   }
 };

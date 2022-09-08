@@ -10,6 +10,7 @@ const Container = styled.div`
   align-items: center;
   padding: 1rem;
   margin-bottom: 2rem;
+  position: relative;
 `;
 
 const CardContainer = (props) => {
