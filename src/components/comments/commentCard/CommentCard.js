@@ -119,6 +119,7 @@ const CommentCard = ({ data }) => {
                 </UserInfo>
                 {username === currentUser.username ? (
                   <ActionButtonContainer>
+                    <ActionButton type="delete" id={id} />
                     {showEditForm ? (
                       <ActionButton
                         type="cancel edit"
@@ -132,7 +133,6 @@ const CommentCard = ({ data }) => {
                         setShowEditForm={setShowEditForm}
                       />
                     )}
-                    <ActionButton type="delete" id={id} />
                   </ActionButtonContainer>
                 ) : (
                   <ActionButton
@@ -195,6 +195,7 @@ const CommentCard = ({ data }) => {
               <LikeButton className="mobile" score={score} id={id} />
               {username === currentUser.username ? (
                 <ActionButtonContainer>
+                  <ActionButton type="delete" id={id} />
                   {showEditForm ? (
                     <ActionButton
                       type="cancel edit"
@@ -208,7 +209,6 @@ const CommentCard = ({ data }) => {
                       setShowEditForm={setShowEditForm}
                     />
                   )}
-                  <ActionButton type="delete" id={id} />
                 </ActionButtonContainer>
               ) : (
                 <ActionButton
