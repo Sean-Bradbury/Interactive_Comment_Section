@@ -30,8 +30,6 @@ const CommentState = (props) => {
         .get('data.json')
         .then((res) => res.data);
 
-      console.log(res);
-
       dispatch({
         type: LOAD_COMMENTS,
         payload: res,

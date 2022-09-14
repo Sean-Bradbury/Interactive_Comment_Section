@@ -53,22 +53,24 @@ const CardActionButton = ({type, id, setShowReplyForm, setShowEditForm}) => {
             setShowReplyForm(true);
         } else if(type === 'edit'){
             setShowEditForm(true);
+        } else {
+            setShowEditForm(false)
         }
     };
 
-    const switchImage = (imageType) => {
-        switch(imageType){
+    const switchImage = () => {
+        switch(type){
             case 'reply':
-                return(
-                    ReplyImage
+                return(                    
+                    <ActionImage src={ReplyImage} alt={type} />
                 );
             case 'edit':
                 return(
-                    EditImage
+                    <ActionImage src={EditImage} alt={type} />                    
                 );
             case 'delete':
                 return(
-                    DeleteImage
+                    <ActionImage src={DeleteImage} alt={type} />                    
                 );
             default:
                 return null
@@ -77,7 +79,7 @@ const CardActionButton = ({type, id, setShowReplyForm, setShowEditForm}) => {
 
   return (
     <Container onClick={() => handleAction(type)}>
-      <ActionImage src={switchImage(type)} alt={type} />
+      {switchImage()}
       <TypeText className={type} >{type}</TypeText>
     </Container>
   )

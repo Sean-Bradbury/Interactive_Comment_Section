@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useLayoutEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
@@ -23,7 +23,11 @@ const FormContainer = styled.div`
   }
 `;
 
-const Form = styled.form``;
+const Form = styled.form`
+  &.edit {
+    margin-bottom: 1rem;
+  }
+`;
 
 const TextAreaInput = styled.textarea`
   width: 100%;
@@ -43,6 +47,10 @@ const TextAreaInput = styled.textarea`
 const MobileBottom = styled.div`
   display: flex;
   justify-content: space-between;
+  &.edit {
+    display: flex;
+    justify-content: flex-end;
+  }
 `;
 
 const Button = styled.button`
@@ -59,6 +67,7 @@ const CommentForm = ({
   id,
   setShowReplyForm,
   setShowEditForm,
+  commentContent,
 }) => {
   const [textValue, setTextValue] = useState('');
   const CommentContext = useContext(commentContext);
@@ -130,34 +139,58 @@ const CommentForm = ({
     }
   };
 
-  return (
-    <FormContainer>
-      <ToastContainer theme="light" />
-      <CardContainer>
-        <Form onSubmit={handleFormSubmit}>
-          <TextAreaInput
-            rows={4}
-            cols={100}
-            placeholder="Add a comment..."
-            value={textValue}
-            onChange={(e) => setTextValue(e.target.value)}
-            required
-          />
-          <MobileBottom>
-            <Avatar
-              src={currentUser && currentUser.image.png}
-              alt={currentUser && currentUser.username}
-              className={
-                AppContext.dimensions.width > 768 && 'desktop'
-              }
+  useLayoutEffect(() => {
+    if (type === 'edit' && textValue === '') {
+      setTextValue(commentContent);
+    }
+  }, [type, textValue, commentContent]);
+
+  if (type !== 'edit') {
+    return (
+      <FormContainer>
+        <ToastContainer theme="light" />
+        <CardContainer>
+          <Form onSubmit={handleFormSubmit}>
+            <TextAreaInput
+              rows={4}
+              cols={100}
+              placeholder="Add a comment..."
+              value={textValue}
+              onChange={(e) => setTextValue(e.target.value)}
+              required
             />
-            <Button type="submit">
-              {type === 'edit' ? 'EDIT' : 'SEND'}
-            </Button>
-          </MobileBottom>
-        </Form>
-      </CardContainer>
-    </FormContainer>
+            <MobileBottom>
+              <Avatar
+                src={currentUser && currentUser.image.png}
+                alt={currentUser && currentUser.username}
+                className={
+                  AppContext.dimensions.width > 768 && 'desktop'
+                }
+              />
+              <Button type="submit">
+                {type === 'edit' ? 'EDIT' : 'SEND'}
+              </Button>
+            </MobileBottom>
+          </Form>
+        </CardContainer>
+      </FormContainer>
+    );
+  }
+
+  return (
+    <Form onSubmit={handleFormSubmit} className="edit">
+      <TextAreaInput
+        rows={4}
+        cols={100}
+        placeholder="Add a comment..."
+        value={textValue}
+        onChange={(e) => setTextValue(e.target.value)}
+        required
+      />
+      <MobileBottom className="edit">
+        <Button type="submit">Update</Button>
+      </MobileBottom>
+    </Form>
   );
 };
 

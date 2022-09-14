@@ -118,12 +118,20 @@ const CommentCard = ({ data }) => {
                   <Date>{createdAt}</Date>
                 </UserInfo>
                 {username === currentUser.username ? (
-                  <ActionButtonContainer className="desktop">
-                    <ActionButton
-                      type="edit"
-                      id={id}
-                      setShowEditForm={setShowEditForm}
-                    />
+                  <ActionButtonContainer>
+                    {showEditForm ? (
+                      <ActionButton
+                        type="cancel edit"
+                        id={id}
+                        setShowEditForm={setShowEditForm}
+                      />
+                    ) : (
+                      <ActionButton
+                        type="edit"
+                        id={id}
+                        setShowEditForm={setShowEditForm}
+                      />
+                    )}
                     <ActionButton type="delete" id={id} />
                   </ActionButtonContainer>
                 ) : (
@@ -134,7 +142,16 @@ const CommentCard = ({ data }) => {
                   />
                 )}
               </InfoArea>
-              <CommentArea>{content}</CommentArea>
+              {showEditForm ? (
+                <CommentForm
+                  type="edit"
+                  id={id}
+                  setShowEditForm={setShowEditForm}
+                  commentContent={content}
+                />
+              ) : (
+                <CommentArea>{content}</CommentArea>
+              )}
             </ContentRight>
           </ContentDesktop>
         </CardContainer>
@@ -143,13 +160,6 @@ const CommentCard = ({ data }) => {
             type="reply"
             id={id}
             setShowReplyForm={setShowReplyForm}
-          />
-        )}
-        {showEditForm && (
-          <CommentForm
-            type="edit"
-            id={id}
-            setShowEditForm={setShowEditForm}
           />
         )}
       </Fragment>
@@ -170,17 +180,34 @@ const CommentCard = ({ data }) => {
                   <Date>{createdAt}</Date>
                 </UserInfo>
               </InfoArea>
-              <CommentArea>{content}</CommentArea>
+              {showEditForm ? (
+                <CommentForm
+                  type="edit"
+                  id={id}
+                  setShowEditForm={setShowEditForm}
+                  commentContent={content}
+                />
+              ) : (
+                <CommentArea>{content}</CommentArea>
+              )}
             </Fragment>
             <ContentBottom>
               <LikeButton className="mobile" score={score} id={id} />
               {username === currentUser.username ? (
                 <ActionButtonContainer>
-                  <ActionButton
-                    type="edit"
-                    id={id}
-                    setShowEditForm={setShowEditForm}
-                  />
+                  {showEditForm ? (
+                    <ActionButton
+                      type="cancel edit"
+                      id={id}
+                      setShowEditForm={setShowEditForm}
+                    />
+                  ) : (
+                    <ActionButton
+                      type="edit"
+                      id={id}
+                      setShowEditForm={setShowEditForm}
+                    />
+                  )}
                   <ActionButton type="delete" id={id} />
                 </ActionButtonContainer>
               ) : (
@@ -198,13 +225,6 @@ const CommentCard = ({ data }) => {
             type="reply"
             id={id}
             setShowReplyForm={setShowReplyForm}
-          />
-        )}
-        {showEditForm && (
-          <CommentForm
-            type="edit"
-            id={id}
-            setShowEditForm={setShowEditForm}
           />
         )}
       </Fragment>
